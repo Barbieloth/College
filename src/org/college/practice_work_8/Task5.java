@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Task5 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("text");
+        System.out.println("Введіть рядок: ");
         String str = sc.nextLine();
 
         String[] verybadwords = {
@@ -21,6 +21,6 @@ public class Task5 {
             result = result.replaceAll("(?i)" + verybadwords[i], rep);
         }
 
-        System.out.println(result);
+        System.out.println("Рядок після цензури: " + result);
     }
 }
