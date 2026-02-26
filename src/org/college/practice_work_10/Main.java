@@ -13,6 +13,7 @@ public class Main {
 
     public static void main(String[] args){
         while(true) {
+            for(int i = 0; i < 50; i++) System.out.println();
             System.out.println("=== СИСТЕМА АУТЕНТИФІКАЦІЇ ===");
              System.out.println("Користувачів: " + countUsers() + "/" + MAX_USERS);
             System.out.println("------------------------------");
