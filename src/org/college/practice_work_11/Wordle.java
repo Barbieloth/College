@@ -1,4 +1,4 @@
-package net.barbieloth.wordle;
+package org.college.practice_work_11;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -23,7 +23,7 @@ public class Wordle {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         try {
-            loadDictionary("words.txt");
+            loadDictionary("src/org/college/practice_work_11/words.txt");
         } catch (NoSuchFileException e) {
             System.out.println("file was not found");
         } catch (IOException e){
@@ -57,8 +57,12 @@ public class Wordle {
                         throw new IllegalArgumentException("Невірний вибір!");
                 }
             }
-        } catch(IllegalArgumentException e){
-            System.out.println("error " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Помилка: " + e.getMessage());
+            System.out.println("Натисніть Enter...");
+            sc.nextLine();
+        } catch (NoSuchElementException e) {
+            System.out.println("Критична помилка даних: " + e.getMessage());
             sc.nextLine();
         }
 
@@ -79,6 +83,7 @@ public class Wordle {
 
     private static void openSetting(Scanner sc){
         while(true) {
+            try{
             clearConsole();
             System.out.println("╔════════════════════════╗");
             System.out.println("║      НАЛАШТУВАННЯ      ║");
@@ -89,16 +94,29 @@ public class Wordle {
             System.out.println("╚════════════════════════╝");
             System.out.print("Оберіть опцію: ");
 
-            String choise = sc.nextLine();
-            try {
-                if (choise.equals("1")) {
-                    System.out.print("Введіть нову довжину: ");
-                    wordLenght = Integer.parseInt(sc.nextLine());
-                } else if (choise.equals("2")) {
-                    System.out.print("Введіть нову кількість спроб: ");
-                    maxAttempts = Integer.parseInt(sc.nextLine());
-                }  else if (choise.equals("3")) break;
-            } catch (NumberFormatException e) {System.out.println("Помилка: введіть число!");}
+            String choice = sc.nextLine();
+            if (choice.equals("1")) {
+                System.out.print("Введіть нову довжину: ");
+                int val = Integer.parseInt(sc.nextLine());
+                if (val < 2 || val > 8) throw new IllegalArgumentException("Неприпустима довжина!");
+                wordLenght = val;
+            } else if (choice.equals("2")) {
+                System.out.print("Введіть нову кількість спроб: ");
+                int val = Integer.parseInt(sc.nextLine());
+                if (val < 1 || val > 20) throw new IllegalArgumentException("Неприпустима кількість спроб!");
+                maxAttempts = val;
+            } else if (choice.equals("3")) {
+                break;
+            } else {
+                throw new IllegalArgumentException("Оберіть пункт 1-3.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Помилка: потрібно ввести ціле число!");
+            sc.nextLine();
+        } catch (IllegalArgumentException e) {
+                System.out.println("Помилка: " + e.getMessage());
+                sc.nextLine();
+            }
         }
     }
 
@@ -142,13 +160,10 @@ public class Wordle {
     private static void startGame(Scanner scanner) {
         List<String> words = DICTIONARY.get(wordLenght);
         if (words == null || words.isEmpty()) {
-            System.out.println("Слів такої довжини не знайдено! Натисніть Enter...");
-            scanner.nextLine();
-            return;
+            throw new NoSuchElementException("Слова довжиною " + wordLenght + " відсутні у словнику!");
         }
 
         secretWord = words.get(new Random().nextInt(words.size()));
-
         List<String> history = new ArrayList<>();
         boolean isWon = false;
 
@@ -160,20 +175,23 @@ public class Wordle {
             String guess = scanner.nextLine().toUpperCase();
 
             if (guess.equals("DEBUG")) {System.exit(0);}
+            try{
+                if (guess.length() != wordLenght) {
+                    throw new IllegalArgumentException("Довжина має бути " + wordLenght + " символів!");
+                }
 
-            if (guess.length() != wordLenght) { throw new Excpe
-                System.out.println("Помилка! Довжина слова має бути " + wordLenght + "літер! Натисніть Enter..." );
+                String feedback = checkWord(guess, secretWord);
+                history.add(feedback);
+
+                if (guess.equals(secretWord)) {
+                    isWon = true;
+                    break;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                System.out.println("Натисніть Enter, щоб спробувати ще раз...");
                 scanner.nextLine();
                 attempt--;
-                continue;
-            }
-
-            String feedback = checkWord(guess, secretWord);
-            history.add(feedback);
-
-            if (guess.equals(secretWord)) {
-                isWon = true;
-                break;
             }
         }
 
