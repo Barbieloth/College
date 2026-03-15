@@ -45,9 +45,14 @@ public class Main {
     private static void ReadTheFile() throws IOException {
         try(FileReader reader = new FileReader(FILE_NAME)) {
             int character;
+            boolean isEmpty = true;
 
             while((character = reader.read()) != -1) {
                 System.out.print((char) character);
+                isEmpty = false;
+            }
+            if (isEmpty) {
+                System.out.println("[Файл порожній]");
             }
         } catch (IOException e) {
             System.out.println("Помилка при читанні файлу: " + e.getMessage());
