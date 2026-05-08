@@ -1,63 +1,84 @@
 package org.college.practice_work_17;
 
-import java.util.Arrays;
-
 public class MyList {
-    private String[] elements;
+    public static class Node {
+        String data;
+        Node next;
+
+        Node(String data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+    private Node head;
     private int size;
-    private static final int default_capacity = 10;
 
     public MyList() {
-        elements = new String[default_capacity];
-        size = 0;
+        this.head = null;
+        this.size = 0;
     }
 
     public void add(String element) {
-        ensureCapacity();
-        elements[size++] = element;
+        if (head == null) {
+            head = new Node(element);
+        } else {
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = new Node(element);
+        }
+        size++;
     }
 
     public void add(int index, String element) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        ensureCapacity();
-        System.arraycopy(elements, index, elements, index + 1, size - index);
-        elements[index] = element;
+        if(index == 0) {
+            Node newNode = new Node(element);
+            newNode.next = head;
+            head = newNode;
+        } else {
+            Node prev = findNodeByIndex(index - 1);
+            Node newNode = new Node(element);
+            newNode.next = prev.next;
+            prev.next = newNode;
+        }
         size++;
     }
 
     public String remove(int index) {
         checkIndex(index);
-        String removed = elements[index];
-        int numMoved = size - index - 1;
-        if (numMoved>0) {
-            System.arraycopy(elements, index + 1, elements, index, numMoved);
+        String removedValue;
+
+        if(index == 0) {
+            removedValue = head.data;
+            head = head.next;
+        } else  {
+            Node prev = findNodeByIndex(index - 1);
+            removedValue = prev.next.data;
+            prev.next = prev.next.next;
         }
-        elements[--size] = null;
-        return removed;
+        size--;
+        return removedValue;
     }
 
     public String get(int index) {
         checkIndex(index);
-        return elements[index];
+        return findNodeByIndex(index).data;
     }
 
     public int size() {
         return size;
     }
 
-    public int capacity() {
-        return elements.length;
-    }
-
-    public void ensureCapacity() {
-        if (size == elements.length) {
-            int new_capacity = default_capacity * 2;
-            elements = Arrays.copyOf(elements, new_capacity);
-
+    private Node findNodeByIndex(int index) {
+        Node current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.next;
         }
-
+        return current;
     }
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {

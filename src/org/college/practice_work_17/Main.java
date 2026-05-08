@@ -15,9 +15,6 @@ public class Main {
             System.out.println("2. Додати елемент за індексом");
             System.out.println("3. Видалити елемент за індексом");
             System.out.println("4. Отримати елемент за індексом");
-            System.out.println("5. Кількість присутніх елементів");
-            System.out.println("6. Кількість елементів у буфері");
-            System.out.println("7. Тест");
             System.out.println("0. Вихід");
             System.out.print("Оберіть дію: ");
 
@@ -47,19 +44,6 @@ public class Main {
                         System.out.print("Введіть індекс: ");
                         int idx = Integer.parseInt(sc.nextLine());
                         System.out.println("Результат: " + goodList.get(idx));
-                    } break;
-                    case  "5": {
-                        System.out.println("Поточний розмір: " + goodList.size());
-                    } break;
-                    case "6": {
-                        System.out.println("Поточна ємність буфера: " + goodList.capacity());
-                    } break;
-                    case "7": {
-                        for (int i = 0; i < 10; i++) {
-                            goodList.add("яблучкі" + (i + 1));
-                        }
-                        System.out.println("Новий розмір: " + goodList.size());
-                        System.out.println("Нова ємність: " + goodList.capacity());
                     } break;
                     case "0": {
                         running = false;
