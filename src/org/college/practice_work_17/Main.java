@@ -15,6 +15,7 @@ public class Main {
             System.out.println("2. Додати елемент за індексом");
             System.out.println("3. Видалити елемент за індексом");
             System.out.println("4. Отримати елемент за індексом");
+            System.out.println("5. Отримати всі елементи");
             System.out.println("0. Вихід");
             System.out.print("Оберіть дію: ");
 
@@ -44,6 +45,17 @@ public class Main {
                         System.out.print("Введіть індекс: ");
                         int idx = Integer.parseInt(sc.nextLine());
                         System.out.println("Результат: " + goodList.get(idx));
+                    } break;
+                    case "5": {
+                        System.out.println("Всі елементи списку:");
+                        String[] all = goodList.getAllElements();
+                        if (all.length == 0) {
+                            System.out.println("Список порожній.");
+                        } else {
+                            for (int i = 0; i < all.length; i++) {
+                                System.out.println(i + ": " + all[i]);
+                            }
+                        }
                     } break;
                     case "0": {
                         running = false;

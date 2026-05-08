@@ -73,6 +73,19 @@ public class MyList {
         return size;
     }
 
+    public String[] getAllElements() {
+        String[] allData = new String[size];
+        Node current = head;
+        int index = 0;
+        while (current != null) {
+            allData[index] = current.data;
+            current = current.next;
+            index++;
+        }
+
+        return allData;
+    }
+
     private Node findNodeByIndex(int index) {
         Node current = head;
         for (int i = 0; i < index; i++) {
@@ -85,4 +98,5 @@ public class MyList {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
     }
+
 }
